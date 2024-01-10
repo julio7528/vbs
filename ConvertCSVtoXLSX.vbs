@@ -63,6 +63,23 @@ Function ConvertCSVtoXLSX(parameter)
     Set objWorkbook = Nothing
     Set objExcel = Nothing
 
+    ' Open Excel File, auto adjust columns width, format date column, save and close
+    Set objExcel = CreateObject("Excel.Application")
+    objExcel.Visible = False
+    objExcel.DisplayAlerts = False
+    Set objWorkbook = objExcel.Workbooks.Open(outputFile, 0, False, , , , True, , , True)
+    objWorkbook.Sheets("Log").Select
+    objExcel.ActiveSheet.Columns.AutoFit
+    objExcel.ActiveSheet.Columns("F:F").Select
+    ' Make exibiton cell in format dd/mm/aaaa hh:mm:ss
+    objExcel.Selection.NumberFormat = "dd/mm/yyyy hh:mm:ss"
+
+    objWorkbook.Save
+    objWorkbook.Close
+    objExcel.Quit
+    Set objWorkbook = Nothing
+    Set objExcel = Nothing
+
     If Err.Number = 0 Then
         ' Return success message
         ConvertCSVtoXLSX = "success"
